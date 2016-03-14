@@ -42,6 +42,10 @@ namespace Gabriel.NewMyCat.Message
         /// 操作执行时间（HH:mm:ss ffff）
         /// </summary>
         public string Time { get; set; }
+        /// <summary>
+        /// 是否为开始节点或结束节点
+        /// </summary>
+        public bool BeginOrEnd { get; set; }
 
         /// <summary>
         /// 事件中嵌套的事务集合

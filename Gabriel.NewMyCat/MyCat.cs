@@ -39,6 +39,10 @@ namespace Gabriel.NewMyCat
             ctx.Transaction.Depth++;
             //
             var countE = ctx.Transaction.Evens.Count;
+            if (countE == 0)
+            {
+                throw new Exception("创建监测业务事务异常，ctx.Transaction.Evens.Count=0");
+            }
             var rootEven = ctx.Transaction.Evens[countE - 1];
             AddTransction(rootEven, t);
         }
@@ -82,7 +86,40 @@ namespace Gabriel.NewMyCat
             var e = new Even(name, description);
             AddEvent(ctx.Transaction, e);
         }
-
+        /// <summary>
+        /// 创建业务异常事件
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        public void ExceptionEvent(string name, string description)
+        {
+            var ctx = _manager.GetContext();
+            if (ctx.IsException)
+            {
+                return;
+            }
+            ctx.IsException = true;
+            var e = new Even(name, description) {IsException = true};
+            AddEvent(ctx.Transaction, e);
+        }
+        /// <summary>
+        /// 创建业务开始事件
+        /// </summary>
+        public void BeginEvent()
+        {
+            var ctx = _manager.GetContext();
+            var e = new Even("业务开始", "") { BeginOrEnd = true };
+            AddEvent(ctx.Transaction, e);
+        }
+        /// <summary>
+        /// 创建业务结束事件
+        /// </summary>
+        public void EndEvent()
+        {
+            var ctx = _manager.GetContext();
+            var e = new Even("业务结束", "") { BeginOrEnd = true };
+            AddEvent(ctx.Transaction, e);
+        }
         private void AddEvent(Transaction root, Even node)
         {
             var countE = root.Evens.Count;
@@ -142,6 +179,60 @@ namespace Gabriel.NewMyCat
             CompleteTransaction(currentT);
         }
 
+        #region MyCatExtensions
 
+        /// <summary>
+        /// 日志打点
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="work"></param>
+        public void Define(string type, string name, Action work)
+        {
+            MyCat.Instance.NewTransaction(type, name);
+            MyCat.Instance.BeginEvent();
+            try
+            {
+                work();
+            }
+            catch (Exception ex)
+            {
+                MyCat.Instance.ExceptionEvent("异常事件", ex.Message);
+                throw;
+            }
+            finally
+            {
+                MyCat.Instance.EndEvent();
+                MyCat.Instance.Complete();
+            }
+        }
+        /// <summary>
+        /// 日志打点
+        /// </summary>
+        /// <typeparam name="TReturnType"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="work"></param>
+        /// <returns></returns>
+        public static TReturnType Define<TReturnType>(string type, string name, Func<TReturnType> work)
+        {
+            MyCat.Instance.NewTransaction(type, name);
+            MyCat.Instance.BeginEvent();
+            try
+            {
+                return work();
+            }
+            catch (Exception ex)
+            {
+                MyCat.Instance.ExceptionEvent("异常事件", ex.Message);
+                throw;
+            }
+            finally
+            {
+                MyCat.Instance.EndEvent();
+                MyCat.Instance.Complete();
+            }
+        }
+        #endregion
     }
 }
