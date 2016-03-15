@@ -29,7 +29,7 @@ namespace Gabriel.NewMyCat
             {
                 var item = currentE[i];
                 var evenText = PlainTextSpace(n) +
-                               string.Format("**E**名称={0}；描述信息={1}；开始时间={2}。", item.Name, item.Description, item.Time);
+                               string.Format("**E**名称={0}；描述信息={1}；时间={2}。", item.Name, item.Description, item.Time);
                 text = text + evenText + PlainTextEven(currentE[i], n);
             }
             return text;
@@ -45,7 +45,7 @@ namespace Gabriel.NewMyCat
             {
                 var item = currentT[i];
                 var textTransaction = PlainTextSpace(n) +
-                                      string.Format("--T--名称={0}；类型={1}；开始时间={2}。", item.Name, item.Type, item.Time);
+                                      string.Format("--T--名称={0}；类型={1}；时间={2}。", item.Name, item.Type, item.Time);
                 text = text + textTransaction + PlainTextTransaction(item, n);
             }
             return text;

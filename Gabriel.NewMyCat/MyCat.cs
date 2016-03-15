@@ -96,9 +96,11 @@ namespace Gabriel.NewMyCat
             var ctx = _manager.GetContext();
             if (ctx.IsException)
             {
+
                 return;
             }
             ctx.IsException = true;
+            ctx.Exception = description;
             var e = new Even(name, description) {IsException = true};
             AddEvent(ctx.Transaction, e);
         }
@@ -159,6 +161,7 @@ namespace Gabriel.NewMyCat
                 Logger.Info(log);
                 //
                 ctx.Transaction = null;
+                //
                 _manager.Dispose();
             }
         }
@@ -194,18 +197,18 @@ namespace Gabriel.NewMyCat
             try
             {
                 work();
+                MyCat.Instance.EndEvent();
+                MyCat.Instance.Complete();
             }
             catch (Exception ex)
             {
                 MyCat.Instance.ExceptionEvent("异常事件", ex.Message);
-                throw;
-            }
-            finally
-            {
                 MyCat.Instance.EndEvent();
                 MyCat.Instance.Complete();
+                throw;
             }
         }
+
         /// <summary>
         /// 日志打点
         /// </summary>
@@ -214,25 +217,26 @@ namespace Gabriel.NewMyCat
         /// <param name="name"></param>
         /// <param name="work"></param>
         /// <returns></returns>
-        public static TReturnType Define<TReturnType>(string type, string name, Func<TReturnType> work)
+        public  TReturnType Define<TReturnType>(string type, string name, Func<TReturnType> work)
         {
             MyCat.Instance.NewTransaction(type, name);
             MyCat.Instance.BeginEvent();
             try
             {
-                return work();
+                var result = work();
+                MyCat.Instance.EndEvent();
+                MyCat.Instance.Complete();
+                return result;
             }
             catch (Exception ex)
             {
                 MyCat.Instance.ExceptionEvent("异常事件", ex.Message);
-                throw;
-            }
-            finally
-            {
                 MyCat.Instance.EndEvent();
                 MyCat.Instance.Complete();
+                throw;
             }
         }
+
         #endregion
     }
 }

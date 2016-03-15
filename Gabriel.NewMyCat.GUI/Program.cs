@@ -12,10 +12,15 @@ namespace Gabriel.NewMyCat.GUI
         static void Main(string[] args)
         {
             Logger.Initialize();
-            //标准版
-            PidanEnterprise();
-            //扩展版
-            PidanEnterpriseExt();
+            var UPPER = 1;
+            for (int i = 0; i < UPPER; i++)
+            {
+                //标准版
+                PidanEnterprise();
+                //扩展版
+                PidanEnterpriseExt();
+            }
+
         }
 
         #region 标准版
@@ -66,11 +71,35 @@ namespace Gabriel.NewMyCat.GUI
             {
                 //
                 MyCat.Instance.LogEvent("审核信息", "获取企业审核信息");
+                ConnectDatabaseExt();
+                //
                 MyCat.Instance.LogEvent("重新审核", "判断企业是否需要重新审核");
+                UpdateEnterpriseExt();
                 //
             });
         }
 
+        static void ConnectDatabaseExt()
+        {
+            MyCat.Instance.Define("DD-EXT", "数据库连接", () =>
+            {
+                //
+                MyCat.Instance.LogEvent("连接数据库", "获取企业审核信息");
+                //throw new Exception("数据库连接失败！");
+                //
+            });
+        }
+        static int UpdateEnterpriseExt()
+        {
+           return MyCat.Instance.Define("II-EXT", "更新企业信息", () =>
+            {
+                //
+                MyCat.Instance.LogEvent("更新企业信息", "企业信息");
+                throw new Exception("更新企业信息失败！");
+                //
+                return 1;
+            });
+        }
         #endregion
 
     }

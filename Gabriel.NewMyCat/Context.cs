@@ -28,6 +28,10 @@ namespace Gabriel.NewMyCat
         /// </summary>
         public bool IsException { get; set; }
         /// <summary>
+        /// 事件异常信息
+        /// </summary>
+        public string Exception { get; set; }
+        /// <summary>
         /// 执行的开始时间
         /// </summary>
         public string BeginTime { get; set; }
