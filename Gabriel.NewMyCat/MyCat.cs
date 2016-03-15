@@ -157,6 +157,9 @@ namespace Gabriel.NewMyCat
             if (ctx.Transaction.Depth == 0)
             {
                 ctx.EndTime = MilliSecondTimer.CurrentTime();
+                #region 时间间隔(毫秒计算)
+                ctx.TimeSpanInMilliseconds = MilliSecondTimer.TimeSpanInMilliseconds(ctx.BeginTime, ctx.EndTime);
+                #endregion
                 var log = MessagePrint.PlainTextMessage(ctx);
                 Logger.Info(log);
                 //
@@ -172,6 +175,10 @@ namespace Gabriel.NewMyCat
             var depth = root.Depth;
             if (depth == 0)
             {
+                #region 时间间隔(毫秒计算)
+                root.TimeSpanInMilliseconds = 
+                    MilliSecondTimer.TimeSpanInMilliseconds(root.Time,MilliSecondTimer.CurrentTime());
+                #endregion
                 return;
             }
             //

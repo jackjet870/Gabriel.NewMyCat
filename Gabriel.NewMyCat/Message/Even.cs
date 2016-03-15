@@ -45,6 +45,10 @@ namespace Gabriel.NewMyCat.Message
         /// </summary>
         public DateTime Time { get; set; }
         /// <summary>
+        /// 时间间隔(毫秒计算)
+        /// </summary>
+        public double TimeSpanInMilliseconds { get; set; }
+        /// <summary>
         /// 是否为开始节点或结束节点
         /// </summary>
         public bool BeginOrEnd { get; set; }

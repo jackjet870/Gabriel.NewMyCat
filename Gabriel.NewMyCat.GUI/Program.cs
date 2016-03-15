@@ -12,14 +12,15 @@ namespace Gabriel.NewMyCat.GUI
         static void Main(string[] args)
         {
             Logger.Initialize();
-            var UPPER = 1;
-            for (int i = 0; i < UPPER; i++)
-            {
-                //标准版
-                PidanEnterprise();
-                //扩展版
-                PidanEnterpriseExt();
-            }
+
+                var UPPER = 1;
+                for (int i = 0; i < UPPER; i++)
+                {
+                    //标准版
+                    PidanEnterprise();
+                    //扩展版
+                    PidanEnterpriseExt();
+                }
 
         }
 
@@ -85,6 +86,7 @@ namespace Gabriel.NewMyCat.GUI
             {
                 //
                 MyCat.Instance.LogEvent("连接数据库", "获取企业审核信息");
+                System.Threading.Thread.Sleep(1000);
                 //throw new Exception("数据库连接失败！");
                 //
             });
@@ -95,6 +97,7 @@ namespace Gabriel.NewMyCat.GUI
             {
                 //
                 MyCat.Instance.LogEvent("更新企业信息", "企业信息");
+                System.Threading.Thread.Sleep(2000);
                 //throw new Exception("更新企业信息失败！");
                 //
                 return 1;
