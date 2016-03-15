@@ -156,7 +156,7 @@ namespace Gabriel.NewMyCat
             CompleteTransaction(ctx.Transaction);
             if (ctx.Transaction.Depth == 0)
             {
-                ctx.EndTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss ffff");
+                ctx.EndTime = MilliSecondTimer.CurrentTime();
                 var log = MessagePrint.PlainTextMessage(ctx);
                 Logger.Info(log);
                 //

@@ -95,7 +95,7 @@ namespace Gabriel.NewMyCat.GUI
             {
                 //
                 MyCat.Instance.LogEvent("更新企业信息", "企业信息");
-                throw new Exception("更新企业信息失败！");
+                //throw new Exception("更新企业信息失败！");
                 //
                 return 1;
             });

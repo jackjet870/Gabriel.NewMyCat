@@ -8,19 +8,22 @@ namespace Gabriel.NewMyCat.Util
     ///</summary>
     public class MilliSecondTimer
     {
-
+        public static DateTime CurrentTime()
+        {
+            return DateTime.Now;
+        }
         public static long CurrentTimeMicros()
         {
             //return HighResTicksProvider.GetTickCount () / 10L; // it's microsecond precise
             return DateTime.Now.Ticks / 10L; // it's millisecond precise
         }
-        public static DateTime CurrentTime(long currentTimeMicros)
+        public static DateTime CurrentTimeMicros(long currentTimeMicros)
         {
             return new DateTime(currentTimeMicros * 10L);
         }
-        public static string CurrentTimeToString(long currentTimeMicros)
+        public static string CurrentTimeMicrosToString(long currentTimeMicros)
         {
-            return CurrentTime(currentTimeMicros).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            return CurrentTimeMicros(currentTimeMicros).ToString("yyyy-MM-dd HH:mm:ss.fff");
         }
         public static long CurrentTimeHoursForJava()
         {
@@ -28,6 +31,13 @@ namespace Gabriel.NewMyCat.Util
             TimeSpan ts = new TimeSpan(DateTime.UtcNow.Ticks - baseline.Ticks);
 
             return ((long)ts.TotalMilliseconds / 3600000L);
+        }
+
+        public static double TimeSpanInMilliseconds(DateTime begin, DateTime end)
+        {
+            var ts =  end-begin;
+
+            return ts.TotalMilliseconds;
         }
     }
 

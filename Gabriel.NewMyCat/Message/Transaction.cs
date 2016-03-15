@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gabriel.NewMyCat.Util;
 
 namespace Gabriel.NewMyCat.Message
 {
@@ -18,7 +19,7 @@ namespace Gabriel.NewMyCat.Message
             // TODO: Complete member initialization
             this.Type = type;
             this.Name = name;
-            this.Time = DateTime.Now.ToString("HH:mm:ss ffff");
+            this.Time = MilliSecondTimer.CurrentTime();
         }
         /// <summary>
         /// 事务中嵌套的事件集合
@@ -42,8 +43,9 @@ namespace Gabriel.NewMyCat.Message
         public string Name { get; set; }
         /// <summary>
         /// 操作执行时间（HH:mm:ss ffff）
+        /// DateTime.Now.ToString("HH:mm:ss ffff");
         /// </summary>
-        public string Time { get; set; }
+        public DateTime Time { get; set; }
         /// <summary>
         /// 深度--嵌套操作计数
         /// </summary>

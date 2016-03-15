@@ -1,4 +1,5 @@
 ﻿using System;
+using Gabriel.NewMyCat.Util;
 
 namespace Gabriel.NewMyCat
 {
@@ -9,7 +10,7 @@ namespace Gabriel.NewMyCat
         public Context()
         {
             this.IsException = false;
-            this.BeginTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss ffff");
+            this.BeginTime = MilliSecondTimer.CurrentTime();
         }
         /// <summary>
         /// 事件--根
@@ -33,12 +34,18 @@ namespace Gabriel.NewMyCat
         public string Exception { get; set; }
         /// <summary>
         /// 执行的开始时间
+        /// DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss ffff");
         /// </summary>
-        public string BeginTime { get; set; }
+        public DateTime BeginTime { get; set; }
         /// <summary>
         /// 执行的结事时间
+        /// DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss ffff");
         /// </summary>
-        public string EndTime { get; set; }
+        public DateTime EndTime { get; set; }
+        /// <summary>
+        /// 时间间隔(毫秒计算)
+        /// </summary>
+        public double TimeSpanInMilliseconds { get; set; }
     }
 
     #endregion

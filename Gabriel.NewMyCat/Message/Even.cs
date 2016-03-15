@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gabriel.NewMyCat.Util;
 
 namespace Gabriel.NewMyCat.Message
 {
@@ -19,7 +20,7 @@ namespace Gabriel.NewMyCat.Message
             this.Name = name;
             this.Description = description;
             this.IsException = false;
-            this.Time = DateTime.Now.ToString("HH:mm:ss ffff");
+            this.Time = MilliSecondTimer.CurrentTime();
         }
 
         /// <summary>
@@ -40,8 +41,9 @@ namespace Gabriel.NewMyCat.Message
         public string Exception { get; set; }
         /// <summary>
         /// 操作执行时间（HH:mm:ss ffff）
+        /// DateTime.Now.ToString("HH:mm:ss ffff");
         /// </summary>
-        public string Time { get; set; }
+        public DateTime Time { get; set; }
         /// <summary>
         /// 是否为开始节点或结束节点
         /// </summary>

@@ -27,7 +27,7 @@ namespace Gabriel.NewMyCat.Util
 
         private static void Log(string severity, string pattern, params object[] args)
         {
-            string timestamp = MilliSecondTimer.CurrentTimeToString(MilliSecondTimer.CurrentTimeMicros());
+            string timestamp = MilliSecondTimer.CurrentTimeMicrosToString(MilliSecondTimer.CurrentTimeMicros());
             string message = string.Format(pattern, args);
             string line = "[" + timestamp + "] [" + severity + "] " +
                           Environment.NewLine + "---------------------" +

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Gabriel.NewMyCat.Message;
+using Gabriel.NewMyCat.Util;
 
 namespace Gabriel.NewMyCat
 {
@@ -14,7 +15,12 @@ namespace Gabriel.NewMyCat
             var item = ctx.Transaction;
             var text = new StringBuilder();
             text.AppendLine();
-            text.AppendFormat("根节点：事务名称={0}；类型={1}；开始时间={2}；结束时间={3}", item.Name, item.Type, ctx.BeginTime, ctx.EndTime);
+            text.AppendFormat("根节点：事务名称={0}({4}毫秒)；类型={1}；开始时间={2:yyyy-MM-dd hh:mm:ss ffff}；结束时间={3:yyyy-MM-dd hh:mm:ss ffff}", 
+                item.Name, 
+                item.Type, 
+                ctx.BeginTime, 
+                ctx.EndTime,
+                MilliSecondTimer.TimeSpanInMilliseconds(ctx.BeginTime,ctx.EndTime));
             text.AppendLine(PlainTextTransaction(ctx.Transaction, 0));
             return text.ToString();
         }
@@ -29,7 +35,7 @@ namespace Gabriel.NewMyCat
             {
                 var item = currentE[i];
                 var evenText = PlainTextSpace(n) +
-                               string.Format("**E**名称={0}；描述信息={1}；时间={2}。", item.Name, item.Description, item.Time);
+                               string.Format("**E**名称={0}；描述信息={1}；时间={2:HH:mm:ss ffff}。", item.Name, item.Description, item.Time);
                 text = text + evenText + PlainTextEven(currentE[i], n);
             }
             return text;
@@ -45,7 +51,7 @@ namespace Gabriel.NewMyCat
             {
                 var item = currentT[i];
                 var textTransaction = PlainTextSpace(n) +
-                                      string.Format("--T--名称={0}；类型={1}；时间={2}。", item.Name, item.Type, item.Time);
+                                      string.Format("--T--名称={0}；类型={1}；时间={2:HH:mm:ss ffff}。", item.Name, item.Type, item.Time);
                 text = text + textTransaction + PlainTextTransaction(item, n);
             }
             return text;
