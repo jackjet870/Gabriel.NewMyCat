@@ -12,12 +12,14 @@ namespace Gabriel.NewMyCat.Message
         /// <summary>
         /// 创建事务
         /// </summary>
-        /// <param name="type">事务类别</param>
+        /// <param name="type">事务的类型</param>
+        /// <param name="category">事务的分类</param>
         /// <param name="name">事务名称</param>
-        public Transaction(string type, string name)
+        public Transaction(string type,string category, string name)
         {
             // TODO: Complete member initialization
             this.Type = type;
+            this.Category = category;
             this.Name = name;
             this.Time = MilliSecondTimer.CurrentTime();
         }
@@ -44,9 +46,15 @@ namespace Gabriel.NewMyCat.Message
 
         }
         /// <summary>
-        /// 事务的类别
+        /// 事务的类型
+        /// 相当于类名(class name)
         /// </summary>
         public string Type { get; set; }
+        /// <summary>
+        /// 事务的分类
+        /// 相当于方法名(method name)
+        /// </summary>
+        public string Category { get; set; }
         /// <summary>
         /// 事务的名称
         /// </summary>

@@ -7,6 +7,8 @@ namespace Gabriel.NewMyCat.Util
 {
     public class NetworkInterfaceManager
     {
+        public static readonly string LocalHostName = GetLocalHostName();
+        public static readonly string LocalHostAddress = GetLocalHostAddress();
         public static string GetLocalHostName()
         {
             return Dns.GetHostName();
@@ -20,8 +22,8 @@ namespace Gabriel.NewMyCat.Util
             {
                 return ip.ToString();
             }
-
-            throw new NotSupportedException("No IP address found");
+            return "NoFound";
+            //throw new NotSupportedException("No IP address found");
         }
 
         public static byte[] GetAddressBytes()

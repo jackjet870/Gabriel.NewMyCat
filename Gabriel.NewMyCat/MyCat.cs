@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Gabriel.NewMyCat.Message;
 using Gabriel.NewMyCat.Util;
@@ -23,13 +24,15 @@ namespace Gabriel.NewMyCat
 
         /// <summary>
         /// 创建监测业务事务
+        /// 访问属性-public=>private
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        public void NewTransaction(string type, string name)
+        /// <param name="type">事务的类型</param>
+        /// <param name="category">事务的分类</param>
+        /// <param name="name">事务名称</param>
+        private void NewTransaction(string type, string category, string name)
         {
             var ctx = _manager.GetContext();
-            var t = new Transaction(type, name);
+            var t = new Transaction(type, category, name);
             t.Depth++;
             if (ctx.Transaction == null)
             {
@@ -148,11 +151,13 @@ namespace Gabriel.NewMyCat
                 AddEvent(currentT, node);
             }
         }
-
-        public void Complete()
+        /// <summary>
+        /// 业务事务-完成
+        /// 访问属性-public=>private
+        /// </summary>
+        private void Complete()
         {
             var ctx = _manager.GetContext();
-            var n = 0;
             CompleteTransaction(ctx.Transaction);
             if (ctx.Transaction.Depth == 0)
             {
@@ -161,7 +166,9 @@ namespace Gabriel.NewMyCat
                 ctx.TimeSpanInMilliseconds = MilliSecondTimer.TimeSpanInMilliseconds(ctx.BeginTime, ctx.EndTime);
                 #endregion
                 var log = MessagePrint.PlainTextMessage(ctx);
-                Logger.Info(log);
+                //LOG Exception
+                LogHelper.Instance.Info(log);
+                //Logger.Info(log);
                 //
                 ctx.Transaction = null;
                 //
@@ -183,8 +190,16 @@ namespace Gabriel.NewMyCat
             }
             //
             var countE = root.Evens.Count;
+            if (countE == 0)
+            {
+                return;
+            }
             var rootEven = root.Evens[countE - 1];
             var countT = rootEven.Transactions.Count;
+            if (countT == 0)
+            {
+                return;
+            }
             var currentT = rootEven.Transactions[countT - 1];
             CompleteTransaction(currentT);
         }
@@ -194,12 +209,13 @@ namespace Gabriel.NewMyCat
         /// <summary>
         /// 日志打点
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
+        /// <param name="type">事务的类型-相当于类名(class name)</param>
+        /// <param name="category">事务的分类-相当于方法名(method name)</param>
+        /// <param name="name">事务名称</param>
         /// <param name="work"></param>
-        public void Define(string type, string name, Action work)
+        public void Define(string type, string category, string name, Action work)
         {
-            MyCat.Instance.NewTransaction(type, name);
+            MyCat.Instance.NewTransaction(type, category, name);
             MyCat.Instance.BeginEvent();
             try
             {
@@ -220,13 +236,14 @@ namespace Gabriel.NewMyCat
         /// 日志打点
         /// </summary>
         /// <typeparam name="TReturnType"></typeparam>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
+        /// <param name="type">事务的类型-相当于类名(class name)</param>
+        /// <param name="category">事务的分类-相当于方法名(method name)</param>
+        /// <param name="name">事务名称</param>
         /// <param name="work"></param>
         /// <returns></returns>
-        public  TReturnType Define<TReturnType>(string type, string name, Func<TReturnType> work)
+        public TReturnType Define<TReturnType>(string type, string category, string name, Func<TReturnType> work)
         {
-            MyCat.Instance.NewTransaction(type, name);
+            MyCat.Instance.NewTransaction(type, category, name);
             MyCat.Instance.BeginEvent();
             try
             {

@@ -30,7 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,7 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ArrayOfConfigInfo.cs" />
+    <Compile Include="Config\Comm\PublicCon.cs" />
+    <Compile Include="Config\Comm\SerializeHelper.cs" />
+    <Compile Include="Config\ConfigInfoHelper.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="Log\ILog.cs" />
+    <Compile Include="Log\Log4netImp.cs" />
+    <Compile Include="Log\LogForMongodbImp.cs" />
     <Compile Include="MessageManager.cs" />
     <Compile Include="MessagePrint.cs" />
     <Compile Include="Message\Even.cs" />
@@ -49,9 +62,13 @@
     <Compile Include="MyCat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CatThreadLocal.cs" />
-    <Compile Include="Util\Logger.cs" />
     <Compile Include="Util\MilliSecondTimer.cs" />
     <Compile Include="Util\NetworkInterfaceManager.cs" />
+    <Compile Include="Util\NewMyCatError.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

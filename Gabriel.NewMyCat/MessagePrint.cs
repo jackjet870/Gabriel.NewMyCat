@@ -15,12 +15,15 @@ namespace Gabriel.NewMyCat
             var item = ctx.Transaction;
             var text = new StringBuilder();
             text.AppendLine();
-            text.AppendFormat("根节点：事务名称={0}({4}ms)；类型={1}；开始时间={2:yyyy-MM-dd hh:mm:ss ffff}；结束时间={3:yyyy-MM-dd hh:mm:ss ffff}", 
+            text.AppendLine("Guid:"+ctx.Guid);
+            text.AppendFormat("根节点[是否异常:{6}]：事务名称={0}({5}ms)；类型={1}；分类={2}；开始时间={3:yyyy-MM-dd hh:mm:ss ffff}；结束时间={4:yyyy-MM-dd hh:mm:ss ffff}", 
                 item.Name, 
                 item.Type, 
+                item.Category,
                 ctx.BeginTime, 
                 ctx.EndTime,
-                ctx.TimeSpanInMilliseconds);
+                ctx.TimeSpanInMilliseconds,
+                ctx.IsException);
             text.AppendLine(PlainTextTransaction(ctx.Transaction, 0));
             return text.ToString();
         }
@@ -53,7 +56,7 @@ namespace Gabriel.NewMyCat
             {
                 var item = currentT[i];
                 var textTransaction = PlainTextSpace(n) +
-                                      string.Format("--T--名称={0}({3}ms)；类型={1}；时间={2:HH:mm:ss ffff}。", item.Name, item.Type, item.Time, item.TimeSpanInMilliseconds);
+                                      string.Format("--T--名称={0}({4}ms)；类型={1}；分类={2}；时间={3:HH:mm:ss ffff}。", item.Name, item.Type,item.Category, item.Time, item.TimeSpanInMilliseconds);
                 text = text + textTransaction + PlainTextTransaction(item, n);
             }
             return text;

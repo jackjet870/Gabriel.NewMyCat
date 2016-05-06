@@ -1,4 +1,5 @@
 ﻿using System;
+using Gabriel.NewMyCat.Config;
 using Gabriel.NewMyCat.Util;
 
 namespace Gabriel.NewMyCat
@@ -11,7 +12,15 @@ namespace Gabriel.NewMyCat
         {
             this.IsException = false;
             this.BeginTime = MilliSecondTimer.CurrentTime();
+            this.Guid = System.Guid.NewGuid().ToString();
+            this.Project = ConfigInfoHelper.Instance.Info.Project;
+            this.ProjectCode = ConfigInfoHelper.Instance.Info.ProjectCode;
+            this.LocalHostName = NetworkInterfaceManager.LocalHostName;
+            this.LocalHostAddress = NetworkInterfaceManager.LocalHostAddress;
         }
+        public string Guid { get; set; }
+        public string LocalHostName { get; set; }
+        public string LocalHostAddress { get; set; }
         /// <summary>
         /// 事件--根
         /// </summary>
