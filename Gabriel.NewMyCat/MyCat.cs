@@ -93,8 +93,8 @@ namespace Gabriel.NewMyCat
         /// 创建业务异常事件
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="description"></param>
-        public void ExceptionEvent(string name, string description)
+        /// <param name="ex"></param>
+        public void ExceptionEvent(string name, Exception ex)
         {
             var ctx = _manager.GetContext();
             if (ctx.IsException)
@@ -102,9 +102,10 @@ namespace Gabriel.NewMyCat
 
                 return;
             }
+            var description = LogException(ex);
             ctx.IsException = true;
             ctx.Exception = description;
-            var e = new Even(name, description) {IsException = true};
+            var e = new Even(name, description) { IsException = true };
             AddEvent(ctx.Transaction, e);
         }
         /// <summary>
@@ -203,7 +204,40 @@ namespace Gabriel.NewMyCat
             var currentT = rootEven.Transactions[countT - 1];
             CompleteTransaction(currentT);
         }
+        /// <summary>
+        /// 程序异常信息解释
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        private static string LogException(Exception ex)
+        {
+            try
+            {
+                var newLine = System.Environment.NewLine;
+                var sb = new StringBuilder();
+                sb.Append(newLine + "程序发生错误：" + newLine);
+                sb.Append("错误信息：" + ex.Message.Replace("\r\n", ";") + newLine);
+                sb.Append("发生时间：" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + newLine);
+                if (ex.TargetSite != null)
+                {
+                    var targetSite = ((System.Reflection.MemberInfo)(ex.TargetSite));
+                    sb.Append("方法名称：" + targetSite.Name + newLine);
+                    sb.Append("C#类名称：" + targetSite.ReflectedType.FullName + newLine);
+                    sb.Append("程 序 集：" + ex.TargetSite.Module.Name + newLine);
+                }
+                if (ex.TargetSite == null)
+                {
+                    sb.Append("错误对象：" + ex.Source + newLine);
+                }             
+                sb.Append("堆栈信息：" + newLine + ex.StackTrace.ToString(CultureInfo.InvariantCulture) + newLine + newLine);
+                return sb.ToString();
+            }
+            catch (Exception)
+            {
+                return  "CannotLogEvent(exception)";
+            }
 
+        }
         #region MyCatExtensions
 
         /// <summary>
@@ -225,7 +259,7 @@ namespace Gabriel.NewMyCat
             }
             catch (Exception ex)
             {
-                MyCat.Instance.ExceptionEvent("异常事件", ex.Message);
+                MyCat.Instance.ExceptionEvent("异常事件", ex);
                 MyCat.Instance.EndEvent();
                 MyCat.Instance.Complete();
                 throw;
@@ -254,7 +288,7 @@ namespace Gabriel.NewMyCat
             }
             catch (Exception ex)
             {
-                MyCat.Instance.ExceptionEvent("异常事件", ex.Message);
+                MyCat.Instance.ExceptionEvent("异常事件", ex);
                 MyCat.Instance.EndEvent();
                 MyCat.Instance.Complete();
                 throw;
@@ -262,5 +296,6 @@ namespace Gabriel.NewMyCat
         }
 
         #endregion
+
     }
 }
